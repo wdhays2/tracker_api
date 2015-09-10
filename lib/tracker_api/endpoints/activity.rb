@@ -33,6 +33,15 @@ module TrackerApi
           Resources::Activity.new({ client: client }.merge(activity))
         end
       end
+
+      def get_epic(project_id, epic_id, params={})
+        data = client.paginate("/projects/#{project_id}/epics/#{epic_id}/activity", params: params)
+        raise Errors::UnexpectedData, 'Array of activities expected' unless data.is_a? Array
+
+        data.map do |activity|
+          Resources::Activity.new({ client: client }.merge(activity))
+        end
+      end
     end
   end
 end
